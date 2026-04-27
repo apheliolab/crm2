@@ -119,3 +119,5 @@ Caused by:
     2: Unable to open static sorted file 00003230.sst
     3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003230.sst
     4: O sistema não pode encontrar o caminho especificado. (os error 3)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)

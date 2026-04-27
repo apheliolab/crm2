@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const protectedPrefixes = ["/dashboard", "/clientes", "/leads", "/funil", "/configuracoes", "/crm"];
+const protectedPrefixes = ["/", "/dashboard", "/clientes", "/leads", "/funil", "/funis", "/configuracoes", "/crm"];
 
 export async function updateSession(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -31,7 +31,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-  const isProtectedRoute = protectedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  const isProtectedRoute = protectedPrefixes.some((prefix) => prefix === "/" ? pathname === "/" : pathname === prefix || pathname.startsWith(`${prefix}/`));
   const isLoginRoute = pathname === "/login";
 
   if (isProtectedRoute && !user) {

@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient as createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { getSupabaseEnv, isSupabaseConfigured } from "@/lib/supabase/env";
 import {
   cloneMockLeadsForSeed,
   createLeadId,
@@ -165,6 +165,7 @@ function toTimelineRows(lead: Lead, ownerUserId: string): TimelineRow[] {
 
 export function CrmProvider({ children }: { children: ReactNode }) {
   const usingSupabase = isSupabaseConfigured();
+  const demoSeedEnabled = getSupabaseEnv().enableDemoSeed;
   const [leads, setLeads] = useState<Lead[]>(usingSupabase ? [] : mockLeads);
   const [hydrated, setHydrated] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -206,7 +207,7 @@ export function CrmProvider({ children }: { children: ReactNode }) {
         .select("id", { count: "exact", head: true })
         .eq("owner_user_id", user.id);
 
-      if (!ownedLeadCheck.error && !ownedLeadCheck.count) {
+      if (!ownedLeadCheck.error && !ownedLeadCheck.count && demoSeedEnabled) {
         const seededData = cloneMockLeadsForSeed();
         const seededLeads = seededData.map((lead) => toLeadRow(lead, user.id));
 
@@ -284,7 +285,7 @@ export function CrmProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [usingSupabase]);
+  }, [demoSeedEnabled, usingSupabase]);
 
   useEffect(() => {
     if (usingSupabase || !hydrated || typeof window === "undefined") return;
@@ -297,6 +298,7 @@ export function CrmProvider({ children }: { children: ReactNode }) {
 
       const supabase = createSupabaseBrowserClient();
       await supabase.auth.signOut();
+      window.location.assign("/login");
     }
 
     async function addLead(input: LeadInput) {

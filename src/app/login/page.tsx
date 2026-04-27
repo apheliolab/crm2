@@ -25,8 +25,8 @@ export default async function LoginPage() {
         <section className="flex items-center px-6 py-10 md:px-12">
           <div className="mx-auto w-full max-w-md">
             <div className="mb-10 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-md border border-accent/30 bg-[rgba(206,103,54,0.16)] p-1.5">
-                <Image src="/aphelio-logo.png" alt="Aphelio Lab" width={32} height={32} className="h-8 w-8 object-contain" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-md border border-accent/30 bg-[rgba(206,103,54,0.1)] p-1.5 shadow-[0_0_24px_rgba(206,103,54,0.08)]">
+                <Image src="/login-orbit-icon.png" alt="Aphelio Lab" width={34} height={34} className="h-8 w-8 object-contain" />
               </div>
               <div>
                 <p className="font-semibold">Aphelio Performance Hub</p>

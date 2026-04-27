@@ -27,3 +27,4 @@
  GET /funil 200 in 25ms (next.js: 4ms, application-code: 21ms)
  GET /leads 404 in 71ms (next.js: 53ms, application-code: 18ms)
  GET /leads 404 in 40ms (next.js: 9ms, application-code: 31ms)
+○ Compiling /login ...

@@ -12,6 +12,7 @@ import {
   Menu,
   Plus,
   Settings,
+  UserCircle2,
   Users,
   X,
 } from "lucide-react";
@@ -85,6 +86,15 @@ export function CrmShell({
     return item?.label ?? "Aphelio CRM";
   }, [pathname]);
 
+  const accountName =
+    currentUser?.user_metadata?.name ??
+    currentUser?.email?.split("@")[0] ??
+    "Minha conta";
+
+  const accountSubtitle =
+    currentUser?.email ??
+    "Abrir configuracoes e sessao";
+
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
       if (!accountMenuRef.current?.contains(event.target as Node)) {
@@ -114,60 +124,62 @@ export function CrmShell({
         ))}
       </nav>
 
-      {currentUser ? (
-        <div ref={accountMenuRef} className="relative mt-auto">
-          <button
-            type="button"
-            onClick={() => setAccountMenuOpen((value) => !value)}
-            className="flex w-full items-center gap-3 rounded-xl border border-[#ff6a00]/22 bg-[linear-gradient(180deg,rgba(38,17,5,0.92),rgba(14,10,14,0.96))] p-4 text-left transition hover:border-[#ff6a00]/35 hover:bg-[linear-gradient(180deg,rgba(48,21,6,0.96),rgba(18,12,18,0.98))]"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[#ff6a00]/30 bg-[#ff6a00]/12 text-sm font-semibold text-[#ffd39a]">
-              {(currentUser.user_metadata?.name?.[0] ?? currentUser.email?.[0] ?? "A").toUpperCase()}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">
-                {currentUser.user_metadata?.name ?? currentUser.email?.split("@")[0] ?? "Conta Aphelio"}
-              </p>
-              <p className="mt-1 truncate text-xs text-slate-400">{currentUser.email}</p>
-            </div>
-            <ChevronDown className={cn("h-4 w-4 text-slate-400 transition", accountMenuOpen && "rotate-180 text-white")} />
-          </button>
+      <div ref={accountMenuRef} className="relative mt-auto">
+        <button
+          type="button"
+          onClick={() => setAccountMenuOpen((value) => !value)}
+          className="flex w-full items-center gap-3 rounded-xl border border-[#ff6a00]/22 bg-[linear-gradient(180deg,rgba(38,17,5,0.92),rgba(14,10,14,0.96))] p-4 text-left transition hover:border-[#ff6a00]/35 hover:bg-[linear-gradient(180deg,rgba(48,21,6,0.96),rgba(18,12,18,0.98))]"
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[#ff6a00]/30 bg-[#ff6a00]/12 text-[#ffd39a]">
+            {currentUser ? (
+              <span className="text-sm font-semibold">
+                {(currentUser.user_metadata?.name?.[0] ?? currentUser.email?.[0] ?? "A").toUpperCase()}
+              </span>
+            ) : (
+              <UserCircle2 className="h-5 w-5" />
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-white">{accountName}</p>
+            <p className="mt-1 truncate text-xs text-slate-400">{accountSubtitle}</p>
+          </div>
+          <ChevronDown className={cn("h-4 w-4 text-slate-400 transition", accountMenuOpen && "rotate-180 text-white")} />
+        </button>
 
-          {accountMenuOpen ? (
-            <div className="absolute inset-x-0 bottom-[calc(100%+12px)] z-30 overflow-hidden rounded-xl border border-white/10 bg-[#07101a]/98 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl">
-              <Link
-                href="/configuracoes"
+        {accountMenuOpen ? (
+          <div className="absolute inset-x-0 bottom-[calc(100%+12px)] z-30 overflow-hidden rounded-xl border border-white/10 bg-[#07101a]/98 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl">
+            <Link
+              href="/configuracoes"
+              onClick={() => {
+                setAccountMenuOpen(false);
+                setMobileOpen(false);
+              }}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5">
+                <Settings className="h-4 w-4" />
+              </span>
+              Configuracoes
+            </Link>
+
+            {usingSupabase ? (
+              <button
+                type="button"
                 onClick={() => {
                   setAccountMenuOpen(false);
-                  setMobileOpen(false);
+                  void signOut();
                 }}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5">
-                  <Settings className="h-4 w-4" />
+                  <LogOut className="h-4 w-4" />
                 </span>
-                Configuracoes
-              </Link>
-
-              {usingSupabase ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAccountMenuOpen(false);
-                    void signOut();
-                  }}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
-                >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5">
-                    <LogOut className="h-4 w-4" />
-                  </span>
-                  Logout
-                </button>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+                Logout
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 

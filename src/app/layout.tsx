@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { CrmProvider } from "@/hooks/use-crm-store";
+import { getSupabasePublicEnvScript } from "@/lib/supabase/env";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -23,12 +24,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabaseEnvScript = getSupabasePublicEnvScript();
+
   return (
     <html
       lang="pt-BR"
       className={`${manrope.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: supabaseEnvScript }} />
         <CrmProvider>{children}</CrmProvider>
       </body>
     </html>

@@ -9,3 +9,12 @@ export function isSupabaseConfigured() {
   const { url, publishableKey } = getSupabaseEnv();
   return Boolean(url && publishableKey);
 }
+
+export function getSupabasePublicEnvScript() {
+  const { url, publishableKey } = getSupabaseEnv();
+
+  return `window.__APHELIO_SUPABASE_ENV__=${JSON.stringify({
+    url: url ?? "",
+    publishableKey: publishableKey ?? "",
+  })};`;
+}

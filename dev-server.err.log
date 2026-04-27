@@ -50,3 +50,48 @@ Caused by:
     2: Unable to open static sorted file 00003326.sst
     3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003326.sst
     4: O sistema não pode encontrar o caminho especificado. (os error 3)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+
+thread 'tokio-runtime-worker' (22452) panicked at turbopack\crates\turbo-tasks-backend\src\backend\operation\mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 4 tasks
+
+Caused by:
+    0: Looking up typed data for 4 tasks from database failed
+    1: Unable to open static sorted file referenced from 00003329.meta
+    2: Unable to open static sorted file 00003326.sst
+    3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003326.sst
+    4: O sistema não pode encontrar o caminho especificado. (os error 3)
+
+thread 'tokio-runtime-worker' (22452) panicked at turbopack\crates\turbo-tasks-backend\src\backend\operation\mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 2 tasks
+
+Caused by:
+    0: Looking up typed data for 2 tasks from database failed
+    1: Unable to open static sorted file referenced from 00003329.meta
+    2: Unable to open static sorted file 00003326.sst
+    3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003326.sst
+    4: O sistema não pode encontrar o caminho especificado. (os error 3)
+
+thread 'tokio-runtime-worker' (7844) panicked at turbopack\crates\turbo-tasks-backend\src\backend\operation\mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 3 tasks
+
+Caused by:
+    0: Looking up typed data for 3 tasks from database failed
+    1: Unable to open static sorted file referenced from 00003329.meta
+    2: Unable to open static sorted file 00003326.sst
+    3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003326.sst
+    4: O sistema não pode encontrar o caminho especificado. (os error 3)
+
+thread 'tokio-runtime-worker' (7844) panicked at turbopack\crates\turbo-tasks-backend\src\backend\operation\mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 2 tasks
+
+Caused by:
+    0: Looking up typed data for 2 tasks from database failed
+    1: Unable to open static sorted file referenced from 00003329.meta
+    2: Unable to open static sorted file 00003326.sst
+    3: Failed to open SST file C:\Users\vinic\Desktop\Aphelio\1. Produtos\aphelio-performance-hub\.next\dev\cache/turbopack\c573e8c4\00003326.sst
+    4: O sistema não pode encontrar o caminho especificado. (os error 3)

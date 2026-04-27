@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, LoaderCircle, LockKeyhole } from "lucide-react";
+import { AlertTriangle, ArrowRight, LoaderCircle, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 
-export function LoginForm() {
+type LoginFormProps = {
+  configured?: boolean;
+};
+
+export function LoginForm({ configured = true }: LoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("apheliolab@gmail.com");
@@ -32,6 +36,12 @@ export function LoginForm() {
         onSubmit={async (event) => {
           event.preventDefault();
           setError(null);
+
+          if (!configured) {
+            setError("O ambiente de autenticacao ainda nao foi conectado no servidor.");
+            return;
+          }
+
           setLoading(true);
 
           try {
@@ -64,13 +74,27 @@ export function LoginForm() {
           <Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
         </label>
 
+        {!configured ? (
+          <div className="rounded-md border border-[#d97706]/25 bg-[#d97706]/10 p-3 text-sm text-[#ffd7a0]">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <div>
+                <p className="font-medium text-[#ffe3bd]">Ambiente ainda nao conectado</p>
+                <p className="mt-1 text-[#ffd7a0]">
+                  As credenciais do Supabase ainda nao foram carregadas neste deploy. Assim que forem aplicadas, o login passa a funcionar normalmente.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         {error ? (
           <div className="rounded-md border border-[#8f2531]/30 bg-[#8f2531]/12 p-3 text-sm text-[#ffb8c0]">
             {error}
           </div>
         ) : null}
 
-        <Button type="submit" size="lg" className="mt-2" disabled={loading}>
+        <Button type="submit" size="lg" className="mt-2" disabled={loading || !configured}>
           {loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
           Entrar no CRM
         </Button>
@@ -83,4 +107,3 @@ export function LoginForm() {
     </div>
   );
 }
-

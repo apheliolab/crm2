@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { LoginForm } from "@/components/auth/login-form";
-import { SupabaseSetupPanel } from "@/components/auth/supabase-setup-panel";
 
 export default async function LoginPage() {
   const configured = isSupabaseConfigured();
@@ -34,7 +33,7 @@ export default async function LoginPage() {
               </div>
             </div>
 
-            {configured ? <LoginForm /> : <SupabaseSetupPanel />}
+            <LoginForm configured={configured} />
           </div>
         </section>
 

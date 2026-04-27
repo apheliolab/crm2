@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+:root {
+  --background: #02050b;
+  --foreground: #ffffff;
+  --card: #09111b;
+  --muted: #91a0b6;
+  --border: #182432;
+  --accent: #ff6a00;
+  --accent-2: #ffb36b;
+  --deep: #010309;
+  --paper: #f9f9f6;
+  --paper-border: #e7e2d8;
+  --success: #10b981;
+  --success-dark: #065f46;
+  --danger: #fb7185;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --font-sans: var(--font-manrope);
+  --font-mono: var(--font-space-grotesk);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #02050b;
+  color-scheme: dark;
+}
+
+::selection {
+  background: rgba(255, 106, 0, 0.35);
+}
+
+.aphelio-grid {
+  background-image:
+    linear-gradient(rgba(244,241,234,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,241,234,0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+}
+
+.glass-panel {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)),
+    #09111b;
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.42), 0 0 44px rgba(255,106,0,0.06);
+}
+
+.form-panel {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018)),
+    #09111b;
+  border: 1px solid rgba(255,106,0,0.22);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.52), 0 0 36px rgba(255,106,0,0.1);
+}
+
+.form-panel label {
+  color: #f4f1ea;
+}
+
+.form-panel option {
+  background: #09111b;
+  color: #f4f1ea;
+}
+
+select {
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  background-color: #09111b;
+  color: #f4f1ea;
+}
+
+select option:checked {
+  background-color: #ff6a00;
+  color: #ffffff;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(164, 173, 186, 0.26);
+  border-radius: 999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.report-shell {
+  background:
+    linear-gradient(180deg, rgba(249,249,246,0.055), rgba(249,249,246,0.018)),
+    #0b0d0f;
+}
+
+.report-cover {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255,106,0,0.22), transparent 34%),
+    linear-gradient(135deg, #010309 0%, #02050b 54%, #09111b 100%);
+}
+
+.report-paper {
+  background:
+    linear-gradient(180deg, rgba(249,249,246,0.035), rgba(249,249,246,0.012)),
+    #02050b;
+}
+
+.report-section {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018)),
+    #02050b;
+}
+
+.report-accent-line {
+  background: linear-gradient(90deg, #ff6a00, rgba(255,106,0,0));
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  .report-shell {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}

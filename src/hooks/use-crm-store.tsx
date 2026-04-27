@@ -294,11 +294,25 @@ export function CrmProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CrmContextValue>(() => {
     async function signOut() {
-      if (!usingSupabase) return;
+      setCurrentUser(null);
+      setRole(null);
+      setLeads([]);
+      setHydrated(true);
+
+      if (!usingSupabase) {
+        window.location.assign("/login");
+        return;
+      }
 
       const supabase = createSupabaseBrowserClient();
-      await supabase.auth.signOut();
-      window.location.assign("/login");
+
+      try {
+        await supabase.auth.signOut({ scope: "global" });
+      } catch (error) {
+        console.error("Nao foi possivel encerrar a sessao no navegador.", error);
+      } finally {
+        window.location.assign("/auth/logout");
+      }
     }
 
     async function addLead(input: LeadInput) {

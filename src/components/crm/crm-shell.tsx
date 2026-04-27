@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  ChevronDown,
   BriefcaseBusiness,
   KanbanSquare,
   LayoutDashboard,
@@ -14,7 +15,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCrmStore } from "@/hooks/use-crm-store";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,6 @@ const navItems = [
   { href: "/clientes", label: "Clientes", icon: BriefcaseBusiness },
   { href: "/leads", label: "Leads", icon: Users },
   { href: "/funil", label: "Funil", icon: KanbanSquare },
-  { href: "/configuracoes", label: "Configuracoes", icon: Settings },
 ];
 
 function NavLink({
@@ -72,15 +72,29 @@ export function CrmShell({
   children: React.ReactNode;
   headerAction?: React.ReactNode;
 }) {
-  const { currentUser, role, signOut, usingSupabase } = useCrmStore();
+  const { currentUser, signOut, usingSupabase } = useCrmStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const pathname = usePathname();
+  const accountMenuRef = useRef<HTMLDivElement | null>(null);
 
   const pageTitle = useMemo(() => {
     if (pathname.startsWith("/leads/")) return "Detalhes do Lead";
+    if (pathname.startsWith("/configuracoes")) return "Configuracoes";
     const item = navItems.find((entry) => pathname === entry.href || pathname.startsWith(`${entry.href}/`));
     return item?.label ?? "Aphelio CRM";
   }, [pathname]);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!accountMenuRef.current?.contains(event.target as Node)) {
+        setAccountMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, []);
 
   const sidebar = (
     <div className="flex h-full flex-col gap-6 p-5">
@@ -100,29 +114,57 @@ export function CrmShell({
         ))}
       </nav>
 
-      <div className="mt-auto rounded-xl border border-[#ff6a00]/22 bg-[linear-gradient(180deg,rgba(38,17,5,0.92),rgba(14,10,14,0.96))] p-5">
-        <p className="text-xs uppercase tracking-[0.22em] text-[#ff9d4d]">Operacao</p>
-        <h3 className="mt-3 text-lg font-semibold text-white">Responder rapido vende mais</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-300">
-          Organize atendimentos, acompanhe oportunidades e reduza leads esquecidos.
-        </p>
-      </div>
-
       {currentUser ? (
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-sm font-medium text-white">{currentUser.email}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{role === "admin" ? "Admin" : "Usuario"}</p>
-          {usingSupabase ? (
-            <Button
-              variant="secondary"
-              className="mt-4 w-full"
-              onClick={() => {
-                void signOut();
-              }}
-            >
-              <LogOut className="h-4 w-4" />
-              Sair
-            </Button>
+        <div ref={accountMenuRef} className="relative mt-auto">
+          <button
+            type="button"
+            onClick={() => setAccountMenuOpen((value) => !value)}
+            className="flex w-full items-center gap-3 rounded-xl border border-[#ff6a00]/22 bg-[linear-gradient(180deg,rgba(38,17,5,0.92),rgba(14,10,14,0.96))] p-4 text-left transition hover:border-[#ff6a00]/35 hover:bg-[linear-gradient(180deg,rgba(48,21,6,0.96),rgba(18,12,18,0.98))]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[#ff6a00]/30 bg-[#ff6a00]/12 text-sm font-semibold text-[#ffd39a]">
+              {(currentUser.user_metadata?.name?.[0] ?? currentUser.email?.[0] ?? "A").toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-white">
+                {currentUser.user_metadata?.name ?? currentUser.email?.split("@")[0] ?? "Conta Aphelio"}
+              </p>
+              <p className="mt-1 truncate text-xs text-slate-400">{currentUser.email}</p>
+            </div>
+            <ChevronDown className={cn("h-4 w-4 text-slate-400 transition", accountMenuOpen && "rotate-180 text-white")} />
+          </button>
+
+          {accountMenuOpen ? (
+            <div className="absolute inset-x-0 bottom-[calc(100%+12px)] z-30 overflow-hidden rounded-xl border border-white/10 bg-[#07101a]/98 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl">
+              <Link
+                href="/configuracoes"
+                onClick={() => {
+                  setAccountMenuOpen(false);
+                  setMobileOpen(false);
+                }}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5">
+                  <Settings className="h-4 w-4" />
+                </span>
+                Configuracoes
+              </Link>
+
+              {usingSupabase ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAccountMenuOpen(false);
+                    void signOut();
+                  }}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-200 transition hover:bg-white/6 hover:text-white"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5">
+                    <LogOut className="h-4 w-4" />
+                  </span>
+                  Logout
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </div>
       ) : null}
